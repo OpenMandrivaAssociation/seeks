@@ -55,6 +55,7 @@ This package contains shared libraries required for %{name}.
 %package -n %{develname}
 Summary:        Seeks development files
 Group:          Development/C++
+Requires:	%{libname} = %{version}
 
 %description -n %{develname}
 This package contains development files for %{name}.
@@ -63,10 +64,10 @@ This package contains development files for %{name}.
 %setup -q
 
 %build
-%configure \
+%configure2_5x \
 	--disable-opencv \
 	--enable-static=no
-%make
+make
 
 %install
 %makeinstall_std
