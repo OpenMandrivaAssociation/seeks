@@ -13,12 +13,20 @@ Group:		Networking/WWW
 License:	AGPLv3
 URL:		http://www.seeks-project.info/
 Source0:	http://www.seeks-project.info/site/releases/%{name}-%{version}.tar.gz
+Source1:	seeks.init
+Source2:	config.mdv
+Patch0:		seeks-0.4.0-upstream-git20120213.patch
+Patch1:		seeks-0.4.0-mdv-opencv.patch
+Requires(pre):	rpm-helper
+Requires(post):	rpm-helper
+Requires(preun):	rpm-helper
+Requires(postun):	rpm-helper
 BuildRequires:	pcre-devel
 BuildRequires:	curl-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	docbook2x
 BuildRequires:	libevent-devel
-#BuildRequires:	opencv-devel >= 2.0
+BuildRequires:	opencv-devel >= 2.0
 BuildRequires:	perl-devel
 BuildRequires:	tokyocabinet-devel
 BuildRequires:	protobuf-devel
@@ -53,8 +61,8 @@ Group:		System/Libraries
 This package contains shared libraries required for %{name}.
 
 %package -n %{develname}
-Summary:        Seeks development files
-Group:          Development/C++
+Summary:	Seeks development files
+Group:		Development/C++
 Requires:	%{libname} = %{version}
 
 %description -n %{develname}
@@ -62,16 +70,32 @@ This package contains development files for %{name}.
 
 %prep
 %setup -q
+%patch0 -p1 -b .git
+%patch1 -p1 -b .cv
 
 %build
 %configure2_5x \
-	--disable-opencv \
 	--enable-static=no
 make
 
 %install
 %makeinstall_std
-install -d %{buildroot}%{_docdir}/%{name}
+install -D -m 755 %{SOURCE1} %{buildroot}%{_initddir}/%{name}
+install -D -m 755 %{SOURCE2} %{buildroot}%{_sysconfdir}/%{name}/config
+install -d -m 755 %{buildroot}%{_docdir}/%{name}
+install -d -m 755 %{buildroot}%{_var}/lib/%{name}
+
+%pre
+%_pre_useradd seeks /var/empty /bin/false
+
+%post
+%_post_service %{name}
+
+%preun
+%_preun_service %{name}
+
+%postun
+%_postun_userdel seeks
 
 %files
 %{_bindir}/*
@@ -79,7 +103,9 @@ install -d %{buildroot}%{_docdir}/%{name}
 %{_datadir}/seeks
 %config(noreplace) %{_sysconfdir}/seeks
 %{_mandir}/man1/seeks*
-%doc AGPL-3.txt AUTHORS BSD-yui.txt COPYING GPL-2.0.txt LGPL-2.1.txt NEWS README
+%{_initddir}/%{name}
+%doc AGPL-3.txt AUTHORS BSD-yui.txt COPYING GPL-2.0.txt LGPL-2.1.txt README
+%attr(-,seeks,seeks) %{_var}/lib/%{name}
 
 %files -n %{libname}
 %{_libdir}/*.so.%{major}*
