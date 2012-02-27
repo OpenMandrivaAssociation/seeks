@@ -29,7 +29,7 @@ BuildRequires:	libevent-devel
 BuildRequires:	opencv-devel >= 2.0
 BuildRequires:	perl-devel
 BuildRequires:	tokyocabinet-devel
-BuildRequires:	protobuf-devel
+BuildRequires:	protobuf-devel >= 2.4.0
 BuildRequires:	protobuf-compiler
 
 %description
