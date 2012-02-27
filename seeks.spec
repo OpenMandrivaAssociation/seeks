@@ -7,7 +7,7 @@
 
 Name:		seeks
 Version:	0.4.0
-Release:	2
+Release:	3
 Summary:	Open decentralized platform for collaborative search
 Group:		Networking/WWW
 License:	AGPLv3
