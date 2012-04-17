@@ -6,8 +6,8 @@
 %define develname %mklibname seeks -d
 
 Name:		seeks
-Version:	0.4.0
-Release:	3
+Version:	0.4.1
+Release:	1
 Summary:	Open decentralized platform for collaborative search
 Group:		Networking/WWW
 License:	AGPLv3
@@ -15,12 +15,8 @@ URL:		http://www.seeks-project.info/
 Source0:	http://www.seeks-project.info/site/releases/%{name}-%{version}.tar.gz
 Source1:	seeks.init
 Source2:	config.mdv
-Patch0:		seeks-0.4.0-upstream-git20120213.patch
 Patch1:		seeks-0.4.0-mdv-opencv.patch
-Requires(pre):	rpm-helper
-Requires(post):	rpm-helper
-Requires(preun):	rpm-helper
-Requires(postun):	rpm-helper
+Requires(pre,post,preun,postun):	rpm-helper
 BuildRequires:	pcre-devel
 BuildRequires:	curl-devel
 BuildRequires:	libxml2-devel
@@ -70,7 +66,6 @@ This package contains development files for %{name}.
 
 %prep
 %setup -q
-%patch0 -p1 -b .git
 %patch1 -p1 -b .cv
 
 %build
@@ -81,7 +76,7 @@ make
 %install
 %makeinstall_std
 install -D -m 755 %{SOURCE1} %{buildroot}%{_initddir}/%{name}
-install -D -m 755 %{SOURCE2} %{buildroot}%{_sysconfdir}/%{name}/config
+install -D -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/%{name}/config
 install -d -m 755 %{buildroot}%{_docdir}/%{name}
 install -d -m 755 %{buildroot}%{_var}/lib/%{name}
 
