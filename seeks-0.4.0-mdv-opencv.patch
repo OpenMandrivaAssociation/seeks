@@ -1,0 +1,13 @@
+Index: seeks-0.4.0/src/plugins/img_websearch/ocvsurf.cpp
+===================================================================
+--- seeks-0.4.0.orig/src/plugins/img_websearch/ocvsurf.cpp
++++ seeks-0.4.0/src/plugins/img_websearch/ocvsurf.cpp
+@@ -29,7 +29,7 @@
+ #include "miscutil.h"
+ #include "errlog.h"
+ 
+-#include <cxflann.h>
++#include <cv.h>
+ 
+ #include <iostream>
+ #include <fstream>
