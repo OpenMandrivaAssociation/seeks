@@ -1,0 +1,108 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          seeks
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Seeks proxy websearch
+# Description:       Seeks proxy websearch
+### END INIT INFO
+
+# Author: Dmitry Mikhirev <dmikhirev@mandriva.org>
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+DAEMON_NAME=seeks
+DAEMON_PROCESS=seeks
+DAEMON_BINARY=/usr/bin/$DAEMON_NAME
+PIDFILE=/var/run/$DAEMON_NAME.pid
+LOCK_FILE=/var/lock/subsys/$DAEMON_NAME
+DAEMON_USER="seeks"
+OPTIONS=""
+RETVAL=0
+
+# Check that the user exists (if we set a user)
+# Does the user exist?
+if [ -n "$DAEMON_USER" ] ; then
+    if getent passwd | grep -q "^$DAEMON_USER:"; then
+        # Obtain the uid and gid
+        DAEMON_UID=`getent passwd | grep "^$DAEMON_USER:" | cut -d : -f 3`
+    else
+        failure "The user $DAEMON_USER, required to run $DAEMON_NAME, does not exist."
+        exit 1
+    fi
+fi
+
+#
+# Function that starts the daemon/service
+#
+start()
+{
+	[ -f $LOCK_FILE ] && return
+	echo -n "Starting $DAEMON_NAME: "
+	daemon $DAEMON_BINARY --daemon --user $DAEMON_USER --pidfile $PIDFILE $OPTIONS
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch $LOCK_FILE
+}
+
+#
+# Function that stops the daemon/service
+#
+stop()
+{
+	echo -n "Shutting down $DAEMON_NAME: "
+	killproc $DAEMON_PROCESS
+	RETVAL="$?"
+	echo
+	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE
+}
+
+#
+# Function that sends a SIGHUP to the daemon/service
+#
+reload() {
+	#
+	# If the daemon can reload its configuration without
+	# restarting (for example, when it is sent a SIGHUP),
+	# then implement that here.
+	#
+	echo -n "Reloading $DAEMON_NAME configuration: "
+	killproc $DAEMON_PROCESS -HUP
+	RETVAL=$?
+	echo
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status $DAEMON_PROCESS
+	RETVAL=$?
+	;;
+  reload)
+	reload
+	;;
+  restart)
+	stop
+	start
+	;;
+  condrestart)
+	if [ -f $LOCK_FILE ]; then
+		stop
+		start
+	fi
+	;;
+  *)
+	echo "Usage: $0 {start|stop|status|restart|reload|condrestart}" >&2
+	RETVAL=1
+	;;
+esac
+
+exit $RETVAL

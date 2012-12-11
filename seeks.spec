@@ -107,3 +107,26 @@ install -d -m 755 %{buildroot}%{_var}/lib/%{name}
 
 %files -n %{develname}
 %{_libdir}/*.so
+
+
+%changelog
+* Tue Apr 17 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 0.4.1-1
++ Revision: 791449
+- update to 0.4.1
+
+* Mon Feb 27 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 0.4.0-3
++ Revision: 781094
+- added initscript
+- various fixes from upstream
+
+* Sat Feb 11 2012 Oden Eriksson <oeriksson@mandriva.com> 0.4.0-2
++ Revision: 773072
+- relink against libpcre.so.1
+
+* Tue Jan 31 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 0.4.0-1
++ Revision: 769993
+- disabled SMP build
+- fixed devel package requires
+- use %%configure2_5x
+- imported package seeks
+
