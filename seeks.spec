@@ -11,7 +11,7 @@ Release:	2
 Summary:	Open decentralized platform for collaborative search
 Group:		Networking/WWW
 License:	AGPLv3
-URL:		http://www.seeks-project.info/
+URL:		https://www.seeks-project.info/
 Source0:	http://www.seeks-project.info/site/releases/%{name}-%{version}.tar.gz
 Source1:	seeks.init
 Source2:	config.mdv
