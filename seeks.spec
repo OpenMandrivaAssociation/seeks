@@ -17,6 +17,11 @@ Source1:	seeks.init
 Source2:	config.mdv
 Patch1:		seeks-0.4.0-mdv-opencv.patch
 Requires(pre,post,preun,postun):	rpm-helper
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pcre-devel
 BuildRequires:	curl-devel
 BuildRequires:	libxml2-devel
